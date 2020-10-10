@@ -1,6 +1,8 @@
 import enum
+import json
 
-class PizzaType(enum.Enum):
+
+class OrderType(enum.Enum):
 	PizzaMexicana = 0
 	PizzaRucolaXXL = 1
 	PizzaChicken = 2
@@ -22,11 +24,11 @@ class OrderingSystem:
 		self._currentPrice = 0
 
 	_pizzaPrices = {
-            PizzaType.PizzaMexicana : PizzaDescription(7, False),
-            PizzaType.PizzaRucolaXXL : PizzaDescription(14, False),
-            PizzaType.PizzaChicken : PizzaDescription(8.5, False),
-            PizzaType.Coke : PizzaDescription(2, True),
-            PizzaType.Beer : PizzaDescription(3, True)}
+            OrderType.PizzaMexicana : PizzaDescription(7, False),
+            OrderType.PizzaRucolaXXL : PizzaDescription(14, False),
+            OrderType.PizzaChicken : PizzaDescription(8.5, False),
+            OrderType.Coke : PizzaDescription(2, True),
+            OrderType.Beer : PizzaDescription(3, True)}
 
 	def add(self, pizzaType):
 		if(self._orders.get(pizzaType) == None):
@@ -53,3 +55,7 @@ class OrderingSystem:
 	def restart(self):
 		self._orders = {}
 		self._currentPrice = 0
+
+	def packToJson(self):
+		dataDict = {"orders": self._orders.keys(), "price": self._currentPrice}
+		return json.dumps(dataDict)
