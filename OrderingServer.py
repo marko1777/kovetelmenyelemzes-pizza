@@ -1,28 +1,38 @@
 import json
 import socketserver
 
-import OrderingSystem
+from OrderingSystem import OrderingSystem
+
+orderingSystem = OrderingSystem(10, 30)
 
 
 class OrderingServer:
-    def start(self, HOST="localhost", PORT="8089"):
+    def start(self, HOST="localhost", PORT=8089):
         with socketserver.TCPServer((HOST, PORT), OrderHandler) as server:
+            print("started")
             server.serve_forever()
 
 
 class OrderHandler(socketserver.BaseRequestHandler):
-    def __init__(self, orderingSystem: OrderingSystem.OrderingSystem):
-        self.orderingSystem = orderingSystem
 
     def handle(self):
         data = self.request.recv(1024).strip()
+        data = b'{' + data.split(b'{')[1]
+        print(data)
         dataDict = json.loads(data)
+        print(dataDict)
 
         if dataDict["action"] == "add":
-            self.orderingSystem.add(dataDict["orderType"])
-        elif dataDict["action"] == "delete":
-            self.orderingSystem.delete(dataDict["orderType"])
+            orderingSystem.add(int(dataDict["orderType"]))
+        elif dataDict["action"] == "remove":
+            orderingSystem.remove(int(dataDict["orderType"]))
         elif dataDict["action"] == "restart":
-            self.orderingSystem.restart()
+            orderingSystem.restart()
 
-        self.request.sendall(self.orderingSystem.packToJson())
+        print(orderingSystem.packToJson())
+        # self.request.sendall(orderingSystem.packToJson())
+
+
+if __name__ == "__main__":
+    orderingServer = OrderingServer()
+    orderingServer.start()
