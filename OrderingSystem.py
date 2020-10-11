@@ -10,7 +10,7 @@ class OrderType(enum.Enum):
 	Beer = 4
 
 
-class PizzaDescription:
+class OrderDescription:
 	def __init__(self, cost, isBeverage):
 		self._cost = cost
 		self._isBeverage = isBeverage
@@ -24,11 +24,11 @@ class OrderingSystem:
 		self._currentPrice = 0
 
 	_pizzaPrices = {
-            OrderType.PizzaMexicana : PizzaDescription(7, False),
-            OrderType.PizzaRucolaXXL : PizzaDescription(14, False),
-            OrderType.PizzaChicken : PizzaDescription(8.5, False),
-            OrderType.Coke : PizzaDescription(2, True),
-            OrderType.Beer : PizzaDescription(3, True)}
+            OrderType.PizzaMexicana : OrderDescription(7, False),
+            OrderType.PizzaRucolaXXL : OrderDescription(14, False),
+            OrderType.PizzaChicken : OrderDescription(8.5, False),
+            OrderType.Coke : OrderDescription(2, True),
+            OrderType.Beer : OrderDescription(3, True)}
 
 	def add(self, pizzaType):
 		if(self._orders.get(pizzaType) == None):
